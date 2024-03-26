@@ -57,7 +57,7 @@ logger_builder* client_logger_builder::add_file_stream(
 {
     if (stream_file_path.empty())
     {
-        throw std::invalid_argument("Invalid arg");;
+        throw std::invalid_argument("Invalid arg");
     }
     std::string abs_path = std::filesystem::absolute(stream_file_path).string();
     for (char c: severities)
