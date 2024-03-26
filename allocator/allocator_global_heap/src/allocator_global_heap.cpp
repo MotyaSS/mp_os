@@ -7,31 +7,27 @@
 allocator_global_heap::allocator_global_heap(
         logger* logger) : _logger(logger)
 {
-    trace_with_guard("allocator_global_heap::allocator_global_heap(logger *logger) : _logger(logger) called");
+    trace_with_guard("allocator_global_heap::allocator_global_heap(logger*) call/end");
 }
 
 allocator_global_heap::~allocator_global_heap()
 {
-    trace_with_guard("allocator_global_heap::~allocator_global_heap() called");
+    trace_with_guard("allocator_global_heap::~allocator_global_heap() call/end");
 }
 
 allocator_global_heap::allocator_global_heap(
         allocator_global_heap &&other) noexcept
 {
-    trace_with_guard("allocator_global_heap::allocator_global_heap(allocator_global_heap &&other) called");
     _logger = other._logger;
     other._logger = nullptr;
-    trace_with_guard("allocator_global_heap::allocator_global_heap(allocator_global_heap &&other) ended");
 
 }
 
 allocator_global_heap &allocator_global_heap::operator=(
         allocator_global_heap &&other) noexcept
 {
-    trace_with_guard("allocator_global_heap &allocator_global_heap::operator=(allocator_global_heap &&other) call");
     _logger = other._logger;
     other._logger = nullptr;
-    trace_with_guard("allocator_global_heap &allocator_global_heap::operator=(allocator_global_heap &&other) ended");
     return *this;
 }
 
@@ -39,7 +35,7 @@ allocator_global_heap &allocator_global_heap::operator=(
         size_t value_size,
         size_t values_count)
 {
-    debug_with_guard("void *allocator_global_heap::allocate called");
+    debug_with_guard("void *allocator_global_heap::allocate call");
     void* allocated_memory;
     try
     {
@@ -51,20 +47,20 @@ allocator_global_heap &allocator_global_heap::operator=(
     }
     catch (std::bad_alloc &err)
     {
-        error_with_guard("You cannot deallocate memory using by allocator!");
+        error_with_guard("allocator_global_hep::allocate: failed to allocate");
         throw err;
     }
-    debug_with_guard("void *allocator_global_heap::allocate ended");
+    debug_with_guard("void *allocator_global_heap::allocate end call");
     return allocated_memory;
 
 }
 
 size_t allocator_global_heap::get_allocated_size(void const* memory)
 {
-    trace_with_guard("allocator_global_heap::~allocator_global_heap() called");
+    trace_with_guard("allocator_global_heap::~allocator_global_heap call");
     auto const* size = reinterpret_cast<size_t const*> (reinterpret_cast<unsigned char const*> (memory) -
                                                         sizeof(size_t));
-    trace_with_guard("allocator_global_heap::~allocator_global_heap() ended");
+    trace_with_guard("allocator_global_heap::~allocator_global_heap end call");
     return *size;
 }
 
