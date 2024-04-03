@@ -8,7 +8,7 @@
 
 
 #define LOG_FORMAT_DEFAULT "[%d %t] (%s): %m"
-#define LOG_CONSOLE_NAME "console"
+#define LOG_CONSOLE_NAME ""
 
 class client_logger_builder final :
         public logger_builder
@@ -25,16 +25,16 @@ public:
     client_logger_builder();
 
     client_logger_builder(
-            client_logger_builder const &other) = delete;
+            client_logger_builder const &other) = default;
 
     client_logger_builder &operator=(
-            client_logger_builder const &other) = delete;
+            client_logger_builder const &other) = default;
 
     client_logger_builder(
-            client_logger_builder &&other) noexcept = delete;
+            client_logger_builder &&other) noexcept = default;
 
     client_logger_builder &operator=(
-            client_logger_builder &&other) noexcept = delete;
+            client_logger_builder &&other) noexcept = default;
 
     ~client_logger_builder() noexcept override = default;
 

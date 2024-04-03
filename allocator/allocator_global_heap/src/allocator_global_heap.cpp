@@ -39,11 +39,12 @@ allocator_global_heap &allocator_global_heap::operator=(
     void* allocated_memory;
     try
     {
-        allocated_memory = reinterpret_cast<void*> (new unsigned char[value_size * values_count + sizeof(size_t)]);
-        auto* size = reinterpret_cast<size_t*>(allocated_memory);
+        allocated_memory = ::operator new[](value_size * values_count + sizeof(size_t) + sizeof(allocator*));
+        auto** allocator = reinterpret_cast<allocator_global_heap**>(allocated_memory);
+        *allocator = this;
+        auto* size = reinterpret_cast<size_t*>(allocator + 1);
         *size = values_count * value_size;
-        allocated_memory = reinterpret_cast<void*>(reinterpret_cast<unsigned char*> (allocated_memory) +
-                                                   sizeof(size_t));
+        allocated_memory = reinterpret_cast<void*>(size + 1);
     }
     catch (std::bad_alloc &err)
     {
@@ -53,6 +54,13 @@ allocator_global_heap &allocator_global_heap::operator=(
     debug_with_guard("void *allocator_global_heap::allocate end call");
     return allocated_memory;
 
+}
+
+allocator const* allocator_global_heap::get_allocator_ptr(void const* memory)
+{
+    trace_with_guard("allocator_global_heap::get_allocator_ptr(void const*) call");
+    return *(reinterpret_cast<allocator_global_heap* const*>(reinterpret_cast<size_t const*>(memory) - 1) - 1);
+    trace_with_guard("allocator_global_heap::get_allocator_ptr(void const*) end call");
 }
 
 size_t allocator_global_heap::get_allocated_size(void const* memory)
@@ -66,14 +74,14 @@ size_t allocator_global_heap::get_allocated_size(void const* memory)
 
 std::string allocator_global_heap::get_byte_dump(unsigned char c)
 {
-    trace_with_guard("allocator_global_heap::get_byte_dump(unsigned char c) called");
+    trace_with_guard("allocator_global_heap::get_byte_dump(unsigned char) call");
     std::string dump;
     for (int i = 7; i >= 0; --i)
     {
         char bit = ((c >> i) & 1) ? '1' : '0';
         dump.push_back(bit);
     }
-    trace_with_guard("allocator_global_heap::get_byte_dump(unsigned char c) ended");
+    trace_with_guard("allocator_global_heap::get_byte_dump(unsigned char) end call");
     return dump;
 }
 
@@ -90,15 +98,14 @@ void allocator_global_heap::deallocate(
         dump += get_byte_dump(*i);
         dump += ' ';
     }
-    debug_with_guard(dump);
-    auto* this_byte = reinterpret_cast<unsigned char*> (this);
-    if (!((temp_pointer + size > this_byte) ||
-          (temp_pointer - sizeof(size_t)) < (this_byte + sizeof(allocator_global_heap))))
+
+    if (this != get_allocator_ptr(at))
     {
-        error_with_guard("You cannot deallocate memory using by allocator!\n");
-        throw std::logic_error("You cannot deallocate memory using by allocator!");
+        throw std::logic_error("trying to deallocate memory that doesn't belong to allocator");
     }
-    ::operator delete(temp_pointer - sizeof(size_t));
+
+    debug_with_guard(dump);
+    ::operator delete(temp_pointer - sizeof(size_t) - sizeof(allocator_global_heap**));
     debug_with_guard("allocator_global_heap::deallocate(void *at) end");
 }
 

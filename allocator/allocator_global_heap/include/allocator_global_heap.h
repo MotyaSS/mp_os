@@ -19,6 +19,8 @@ private:
 
 public:
 
+    allocator const* get_allocator_ptr(void const* memory);
+
     size_t get_allocated_size(void const* memory);
 
     std::string get_byte_dump(unsigned char c);

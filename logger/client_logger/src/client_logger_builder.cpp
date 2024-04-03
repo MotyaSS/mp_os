@@ -269,12 +269,12 @@ logger_builder* client_logger_builder::transform_with_configuration(
     for (auto &curr_stream: logger_settings.second)
     {
         std::queue<std::string> file_severities = split_string(curr_stream, ':');
-        std::string quoted_name = file_severities.front();
+        std::string filename = file_severities.front();
         file_severities.pop();
         std::string severities = file_severities.front();
-        std::string filename;
+        file_severities.pop();
 
-        if (filename == LOG_CONSOLE_NAME)
+        if (filename == "console")
         {
             add_console_stream(severities);
         }
@@ -283,7 +283,7 @@ logger_builder* client_logger_builder::transform_with_configuration(
         {
             try
             {
-                filename = unquote_string(quoted_name);
+                filename = unquote_string(filename);
             }
             catch (std::invalid_argument &)
             {
