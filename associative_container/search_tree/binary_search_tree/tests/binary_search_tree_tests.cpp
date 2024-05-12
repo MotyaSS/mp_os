@@ -96,7 +96,7 @@ bool infix_iterator_test(
     
     for (auto const &item: expected_result)
     {
-        if ((*it)->depth != item.depth || (*it)->key != item.key || (*it)->value != item.value)
+        if ((*it)->depth != item.depth || (*it)->get_key() != item.get_key() || (*it)->get_value() != item.get_value())
         {
             return false;
         }
@@ -119,7 +119,7 @@ bool prefix_iterator_test(
     
     for (auto const &item: expected_result)
     {
-        if ((*it)->depth != item.depth || (*it)->key != item.key || (*it)->value != item.value)
+        if ((*it)->depth != item.depth || (*it)->get_key() != item.get_key() || (*it)->get_value() != item.get_value())
         {
             return false;
         }
@@ -143,7 +143,7 @@ bool postfix_iterator_test(
     
     for (auto const &item: expected_result)
     {
-        if ((*it)->depth != item.depth || (*it)->key != item.key || (*it)->value != item.value)
+        if ((*it)->depth != item.depth || (*it)->get_key() != item.get_key() || (*it)->get_value() != item.get_value())
         {
             return false;
         }
