@@ -41,7 +41,6 @@ TEST(positive_tests, test1)
     big_integer bigint_1("32850346459076457453464575686784654");
     big_integer bigint_2("423534596495087569087908753095322");
     big_integer result_of_sum = bigint_1 + bigint_2;
-    
     std::stringstream ss;
     ss << result_of_sum;
     std::string result_string = ss.str();
@@ -212,6 +211,9 @@ int main(
     char **argv)
 {
     testing::InitGoogleTest(&argc, argv);
-    
+    big_integer bigint_1("-3");
+    big_integer bigint_2("-1");
+    big_integer g = bigint_1 * bigint_2;
+    bigint_1.dump_value(std::cout);
     return RUN_ALL_TESTS();
 }
