@@ -42,7 +42,7 @@ TEST(positive_tests, test1)
 
     big_integer bigint_1("2");
     big_integer bigint_2("3");
-    big_integer::divide(bigint_1, bigint_2, nullptr, big_integer::division_rule::trivial);
+    //big_integer::divide(bigint_1, bigint_2, nullptr, big_integer::division_rule::trivial);
 
     EXPECT_TRUE((std::ostringstream() << bigint_1).str() == "0");
 

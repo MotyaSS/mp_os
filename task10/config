@@ -1,0 +1,16 @@
+(binary)
+unary()
+add +
+mult *
+sub -
+#mult prod и это тоже комментарий
+[sub minus
+pow ^ и это...]
+        div /
+rem             %
+xor <> # aboba
+xor[comment]><
+#xor <>
+input in
+output print
+# = ->
